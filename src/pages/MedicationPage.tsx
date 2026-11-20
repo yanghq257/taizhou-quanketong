@@ -1,20 +1,32 @@
-import { AlertTriangle, BookOpen, ChevronDown, Leaf, Pill, ShieldAlert } from 'lucide-react'
+import {
+  AlertTriangle,
+  BookOpen,
+  ChevronDown,
+  Leaf,
+  Pill,
+  RefreshCw,
+  ShieldAlert,
+} from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { DataDisclaimer } from '../components/DataDisclaimer'
 import { PageHeader } from '../components/PageHeader'
 import { SearchInput } from '../components/SearchInput'
+import { ComorbidityRedlines } from '../components/medication/ComorbidityRedlines'
+import { RenewalChecklist } from '../components/medication/RenewalChecklist'
 import { formulas } from '../data/formulas'
 import { medications } from '../data/medications'
+import { renewalChecklistItems } from '../data/renewal'
 import { safetyAlerts } from '../data/safety'
 import { cn } from '../lib/utils'
 
-type MedicationTab = 'drugs' | 'formulas' | 'alerts'
+type MedicationTab = 'drugs' | 'formulas' | 'alerts' | 'renewal'
 type KindFilter = '全部' | '中成药' | '西药'
 
 const tabs: Array<{ id: MedicationTab; label: string; icon: typeof Pill; count: number }> = [
   { id: 'drugs', label: '药品速查', icon: Pill, count: medications.length },
   { id: 'formulas', label: '经典方剂', icon: BookOpen, count: formulas.length },
   { id: 'alerts', label: '相互作用红灯', icon: ShieldAlert, count: safetyAlerts.length },
+  { id: 'renewal', label: '续药核对', icon: RefreshCw, count: renewalChecklistItems.length },
 ]
 
 const kindFilters: KindFilter[] = ['全部', '中成药', '西药']
@@ -108,7 +120,7 @@ export function MedicationPage() {
       <div
         role="group"
         aria-label="配药房内容切换"
-        className="grid grid-cols-3 gap-1 rounded-2xl border border-slate-200/80 bg-white p-1 shadow-sm"
+        className="grid grid-cols-2 gap-1 rounded-2xl border border-slate-200/80 bg-white p-1 shadow-sm sm:grid-cols-4"
       >
         {tabs.map((item) => {
           const Icon = item.icon
@@ -141,7 +153,7 @@ export function MedicationPage() {
         })}
       </div>
 
-      {tab !== 'alerts' ? (
+      {tab === 'drugs' || tab === 'formulas' ? (
         <div className="mt-4">
           <SearchInput
             value={query}
@@ -382,6 +394,8 @@ export function MedicationPage() {
 
       {tab === 'alerts' ? (
         <section className="mt-4" aria-labelledby="alerts-heading">
+          <ComorbidityRedlines />
+
           <div className="mb-3">
             <p className="eyebrow">Interaction red lights</p>
             <h2 id="alerts-heading" className="mt-0.5 text-base font-semibold text-ink">
@@ -451,6 +465,8 @@ export function MedicationPage() {
           )}
         </section>
       ) : null}
+
+      {tab === 'renewal' ? <RenewalChecklist /> : null}
 
       <div className="mt-6">
         <DataDisclaimer />

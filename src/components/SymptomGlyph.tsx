@@ -1,10 +1,14 @@
 import {
+  BatteryLow,
   Brain,
   Compass,
   Droplets,
+  HeartHandshake,
   HeartPulse,
   Stethoscope,
   Thermometer,
+  TrendingDown,
+  Waves,
   Wind,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -19,6 +23,10 @@ const iconMap: Record<SymptomIcon, LucideIcon> = {
   abdomen: Stethoscope,
   cough: Wind,
   bowel: Droplets,
+  fatigue: BatteryLow,
+  edema: Waves,
+  'weight-loss': TrendingDown,
+  anxiety: HeartHandshake,
 }
 
 export function SymptomGlyph({

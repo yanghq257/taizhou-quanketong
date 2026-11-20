@@ -16,6 +16,7 @@ import { CommunicationPanel } from '../components/symptom/CommunicationPanel'
 import { DifferentialPanel } from '../components/symptom/DifferentialPanel'
 import { DualConsultationPanel } from '../components/symptom/DualConsultationPanel'
 import { TriageBanner } from '../components/symptom/TriageBanner'
+import { UndifferentiatedBanner } from '../components/symptom/UndifferentiatedBanner'
 import { WorkupPanel } from '../components/symptom/WorkupPanel'
 import { getSymptom } from '../data/symptoms'
 
@@ -130,6 +131,8 @@ export function SymptomDetailPage() {
       </section>
 
       <TriageBanner triage={symptom.triage} />
+
+      {symptom.undifferentiated ? <UndifferentiatedBanner symptomId={symptom.id} /> : null}
 
       <nav
         aria-label="本页快捷导航"

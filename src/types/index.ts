@@ -14,6 +14,10 @@ export type SymptomId =
   | 'abdominal-pain'
   | 'cough'
   | 'diarrhea'
+  | 'fatigue'
+  | 'edema'
+  | 'weight-loss'
+  | 'anxiety'
 
 export type SymptomIcon =
   | 'fever'
@@ -23,6 +27,10 @@ export type SymptomIcon =
   | 'abdomen'
   | 'cough'
   | 'bowel'
+  | 'fatigue'
+  | 'edema'
+  | 'weight-loss'
+  | 'anxiety'
 
 export type DifferentialTier = 'critical' | 'common' | 'rare'
 
@@ -133,6 +141,8 @@ export interface Symptom {
   aliases: string[]
   icon: SymptomIcon
   category: string
+  /** 是否在详情页显示“未分化疾病”全科首诊提示 */
+  undifferentiated?: boolean
   tagline: string
   overview: string
   epidemiologyNote: string
@@ -186,6 +196,17 @@ export interface SafetyAlert {
   combination: string
   risk: string
   action: string
+}
+
+/** 多病共存患者的开方前综合核对，不替代药师审核。 */
+export interface ComorbidityMedicationRule {
+  id: string
+  title: string
+  comorbidities: string[]
+  medicationExamples: string[]
+  risk: string
+  assessment: string[]
+  monitoring: string[]
 }
 
 export type ScriptCategory =

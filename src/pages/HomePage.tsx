@@ -6,6 +6,7 @@ import {
   ShieldCheck,
   Siren,
   Sparkles,
+  Stethoscope,
 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -14,7 +15,14 @@ import { EmergencySheet } from '../components/EmergencySheet'
 import { SearchInput } from '../components/SearchInput'
 import { SectionHeading } from '../components/SectionHeading'
 import { SymptomCard } from '../components/SymptomCard'
-import { homeSymptomOrder, popularSearches, searchSymptoms, symptoms } from '../data/symptoms'
+import {
+  getSymptom,
+  homeSymptomOrder,
+  popularSearches,
+  searchSymptoms,
+  symptoms,
+  undifferentiatedSymptomOrder,
+} from '../data/symptoms'
 
 const quickTools = [
   {
@@ -54,6 +62,14 @@ export function HomePage() {
       homeSymptomOrder
         .map((id) => symptoms.find((symptom) => symptom.id === id))
         .filter((symptom) => symptom !== undefined),
+    [],
+  )
+  const undifferentiatedSymptoms = useMemo(
+    () =>
+      undifferentiatedSymptomOrder.flatMap((id) => {
+        const symptom = getSymptom(id)
+        return symptom ? [symptom] : []
+      }),
     [],
   )
   const searching = query.trim().length > 0
@@ -158,6 +174,43 @@ export function HomePage() {
         </button>
       </div>
 
+      <section className="pt-4" aria-label="全科医学科定位">
+        <div className="flex items-start gap-3 rounded-2xl border border-jade-200/80 bg-[linear-gradient(135deg,#F1FAF6_0%,#FFFFFF_70%,#FBF8F1_120%)] px-4 py-3.5 shadow-sm">
+          <span
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-jade-800 text-white"
+            aria-hidden="true"
+          >
+            <Stethoscope className="h-[18px] w-[18px]" />
+          </span>
+          <div className="min-w-0">
+            <p className="eyebrow">Department positioning</p>
+            <p className="mt-1 text-[12px] leading-6 text-jade-950">
+              <strong className="font-semibold">全科医学：</strong>从慢病管理到未分化疾病的首诊，提供一体化、连续性健康管理。初诊不知挂哪科，先来全科。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {!searching ? (
+        <section className="pt-6" aria-labelledby="undifferentiated-heading">
+          <SectionHeading
+            kicker="Undifferentiated & systemic"
+            title="未分化疾病 / 全身症状"
+            description="乏力、水肿、消瘦、焦虑：先做全科分析，再决定检查与转诊。"
+            action={
+              <span className="hidden rounded-full border border-jade-200 bg-jade-50 px-3 py-1 text-[10px] font-medium text-jade-700 sm:inline-flex">
+                4 个全身症状入口
+              </span>
+            }
+          />
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {undifferentiatedSymptoms.map((symptom) => (
+              <SymptomCard key={symptom.id} symptom={symptom} />
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       <section className="pt-6" aria-live="polite">
         <SectionHeading
           kicker={searching ? 'Local search' : 'Symptom index'}
@@ -170,7 +223,7 @@ export function HomePage() {
           action={
             !searching ? (
               <span className="hidden rounded-full border border-slate-200 bg-white px-3 py-1 text-[10px] font-medium text-slate-500 sm:inline-flex">
-                {symptoms.length} 个症状入口
+                {homeSymptomOrder.length} 个高频入口
               </span>
             ) : null
           }

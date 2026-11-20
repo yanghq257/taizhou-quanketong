@@ -6,6 +6,10 @@ import { dizziness } from './dizziness'
 import { abdominalPain } from './abdominal-pain'
 import { cough } from './cough'
 import { diarrhea } from './diarrhea'
+import { fatigue } from './fatigue'
+import { edema } from './edema'
+import { weightLoss } from './weight-loss'
+import { anxiety } from './anxiety'
 
 export const symptoms: Symptom[] = [
   fever,
@@ -15,6 +19,10 @@ export const symptoms: Symptom[] = [
   abdominalPain,
   cough,
   diarrhea,
+  fatigue,
+  edema,
+  weightLoss,
+  anxiety,
 ]
 
 export const symptomMap = new Map<string, Symptom>(
@@ -30,6 +38,14 @@ export const homeSymptomOrder: SymptomId[] = [
   'abdominal-pain',
   'headache',
   'chest-pain',
+]
+
+/** 未分化疾病 / 全身症状入口；首页单独成组展示。 */
+export const undifferentiatedSymptomOrder: SymptomId[] = [
+  'fatigue',
+  'edema',
+  'weight-loss',
+  'anxiety',
 ]
 
 export function getSymptom(id: string | undefined): Symptom | undefined {
