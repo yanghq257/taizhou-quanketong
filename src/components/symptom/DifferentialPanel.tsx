@@ -1,6 +1,7 @@
 import { ChevronDown, ClipboardCheck, Flag, Info } from 'lucide-react'
-import type { Differential, DifferentialTier } from '../../types'
+import type { Differential, DifferentialTier, MurtaghBand, YellowFlag } from '../../types'
 import { cn } from '../../lib/utils'
+import { YellowFlagsPanel } from './YellowFlagsPanel'
 
 const tierConfig = {
   critical: {
@@ -59,7 +60,26 @@ const likelihoodStyle: Record<Differential['likelihood'], string> = {
   较少见: 'border-slate-200 bg-white text-slate-500',
 }
 
-export function DifferentialPanel({ differentials }: { differentials: Differential[] }) {
+const murtaghConfig: Record<MurtaghBand, { label: string; frame: string; tag: string }> = {
+  'most-common': {
+    label: '最常见',
+    frame: 'border-jade-200 bg-jade-50 text-jade-800',
+    tag: 'bg-jade-700 text-white',
+  },
+  'less-common-serious': {
+    label: '不常见但重要',
+    frame: 'border-amber-200 bg-amber-50 text-amber-800',
+    tag: 'bg-amber-700 text-white',
+  },
+}
+
+export function DifferentialPanel({
+  differentials,
+  yellowFlags,
+}: {
+  differentials: Differential[]
+  yellowFlags?: YellowFlag[]
+}) {
   return (
     <div className="space-y-7">
       <div className="flex items-start gap-2.5 rounded-2xl border border-jade-100 bg-jade-50/60 px-4 py-3 text-[11px] leading-5 text-jade-900/75">
@@ -68,6 +88,8 @@ export function DifferentialPanel({ differentials }: { differentials: Differenti
           三层排序用于建立首诊的“排除危险 → 识别常见 → 认识少见”思维。层内顺序为学习用常见度排序，不是经过本地流行病学验证的精确患病概率。
         </p>
       </div>
+
+      <YellowFlagsPanel flags={yellowFlags} />
 
       {tierOrder.map((tier) => {
         const items = differentials.filter((item) => item.tier === tier)
@@ -99,6 +121,14 @@ export function DifferentialPanel({ differentials }: { differentials: Differenti
                   </span>
                 </h3>
                 <p className={cn('mt-0.5 text-[10px]', config.subtitleClass)}>{config.subtitle}</p>
+                {items.some((item) => item.murtaghBand) ? (
+                  <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[9px] text-slate-500">
+                    <span className="font-medium">Murtagh 常见度：</span>
+                    <MurtaghBadge band="most-common" />
+                    <MurtaghBadge band="less-common-serious" />
+                    <span>教学标注，非本地患病率</span>
+                  </div>
+                ) : null}
               </div>
             </div>
 
@@ -116,6 +146,30 @@ export function DifferentialPanel({ differentials }: { differentials: Differenti
         )
       })}
     </div>
+  )
+}
+
+function MurtaghBadge({ band }: { band: MurtaghBand }) {
+  const config = murtaghConfig[band]
+
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center overflow-hidden rounded-full border text-[9px] font-medium',
+        config.frame,
+      )}
+      title="Murtagh 教学分层，不代表本地患病率"
+    >
+      <span
+        className={cn(
+          'px-1.5 py-0.5 text-[8px] font-semibold uppercase tracking-wide',
+          config.tag,
+        )}
+      >
+        Murtagh
+      </span>
+      <span className="px-1.5 py-0.5">{config.label}</span>
+    </span>
   )
 }
 
@@ -150,14 +204,18 @@ function DifferentialCard({
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-1.5">
                 <h4 className="text-[15px] font-semibold tracking-tight text-ink">{item.name}</h4>
-                <span
-                  className={cn(
-                    'rounded-full border px-1.5 py-0.5 text-[9px] font-medium',
-                    likelihoodStyle[item.likelihood],
-                  )}
-                >
-                  {item.likelihood}
-                </span>
+                {item.murtaghBand ? (
+                  <MurtaghBadge band={item.murtaghBand} />
+                ) : (
+                  <span
+                    className={cn(
+                      'rounded-full border px-1.5 py-0.5 text-[9px] font-medium',
+                      likelihoodStyle[item.likelihood],
+                    )}
+                  >
+                    {item.likelihood}
+                  </span>
+                )}
               </div>
               {item.englishName ? (
                 <p className="mt-0.5 text-[10px] uppercase tracking-wide text-slate-400">

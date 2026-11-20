@@ -1,33 +1,45 @@
 import {
   ArrowUpRight,
+  Brain,
   Check,
   ClipboardList,
   Leaf,
   ListChecks,
+  NotebookPen,
   RotateCcw,
   Siren,
   Stethoscope,
 } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { CopyButton } from '../components/CopyButton'
 import { DataDisclaimer } from '../components/DataDisclaimer'
 import { PageHeader } from '../components/PageHeader'
+import { SoapDraftDialog } from '../components/SoapDraftDialog'
 import { TCM_TEN_QUESTIONS } from '../data/tcm'
 import { getSymptom, symptoms } from '../data/symptoms'
 import { cn, percent } from '../lib/utils'
+
+const hypothesisLenses = [
+  { label: '最可能', hint: '先问支持与反对线索' },
+  { label: '最危险', hint: '红旗不因常见解释降级' },
+  { label: '最易忽略', hint: '情境、用药与心理社会因素' },
+] as const
 
 export function ConsultPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const symptom = getSymptom(searchParams.get('symptom') ?? '') ?? symptoms[0]
   const [checked, setChecked] = useState<Set<string>>(() => new Set())
+  const [soapOpen, setSoapOpen] = useState(false)
+  const closeSoap = useCallback(() => setSoapOpen(false), [])
 
   useEffect(() => {
-    document.title = '问诊单 · 台州全科通'
+    document.title = '全科临床思维 · 台州全科通'
   }, [])
 
   useEffect(() => {
     setChecked(new Set())
+    setSoapOpen(false)
   }, [symptom.id])
 
   const totalQuestions = symptom.opqrst.length + TCM_TEN_QUESTIONS.length
@@ -82,10 +94,43 @@ export function ConsultPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="First-visit inquiry"
-        title="首诊问诊单"
-        description="选一个症状，逐项问完西医 OPQRST 与中医十问。勾选只在本页临时保存，离开即清空。"
+        eyebrow="Clinical reasoning"
+        title="全科临床思维"
+        description="先建立假设，再有目的地问诊；勾选完成后可生成 SOAP 病历草稿。红旗始终优先。"
       />
+
+      <section
+        aria-labelledby="hypothesis-title"
+        className="mb-3 overflow-hidden rounded-[22px] border border-jade-200/70 bg-[linear-gradient(135deg,#0D433F_0%,#10524C_55%,#11665D_100%)] px-4 py-4 text-white shadow-card md:px-5"
+      >
+        <div className="flex items-start gap-3">
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/10 text-jade-100">
+            <Brain className="h-4 w-4" aria-hidden="true" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-jade-200">
+              Hypothesis-driven inquiry
+            </p>
+            <h2 id="hypothesis-title" className="mt-0.5 text-sm font-semibold text-white">
+              先假设，再问诊
+            </h2>
+            <p className="mt-1.5 text-[12px] leading-6 text-jade-50/90">
+              请先建立 3 个初始假设（最可能、最危险、最容易被忽略），带着目的去问诊，而不是机械勾选。
+            </p>
+          </div>
+        </div>
+        <div className="mt-3 grid gap-2 sm:grid-cols-3">
+          {hypothesisLenses.map((lens) => (
+            <div
+              key={lens.label}
+              className="rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2"
+            >
+              <p className="text-[10px] font-semibold text-jade-100">{lens.label}</p>
+              <p className="mt-0.5 text-[9px] leading-4 text-jade-100/60">{lens.hint}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <div className="surface-card p-4 md:p-5">
         <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
@@ -159,7 +204,17 @@ export function ConsultPage() {
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
           <p className="text-[10px] text-slate-400">临时核对 · 不上传 · 离开后可清空</p>
-          <CopyButton text={outline} label="复制问诊提纲" copiedLabel="提纲已复制" />
+          <div className="flex flex-wrap items-center gap-2">
+            <CopyButton text={outline} label="复制问诊提纲" copiedLabel="提纲已复制" />
+            <button
+              type="button"
+              onClick={() => setSoapOpen(true)}
+              className="inline-flex min-h-9 items-center gap-1.5 rounded-xl bg-jade-800 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-jade-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jade-500 focus-visible:ring-offset-2"
+            >
+              <NotebookPen className="h-3.5 w-3.5" aria-hidden="true" />
+              生成 SOAP 病历草稿
+            </button>
+          </div>
         </div>
       </div>
 
@@ -354,19 +409,35 @@ export function ConsultPage() {
           <div className="surface-card p-4">
             <div className="flex items-center gap-2">
               <ClipboardList className="h-4 w-4 text-jade-700" aria-hidden="true" />
-              <h2 className="text-xs font-semibold text-ink">复制说明</h2>
+              <h2 className="text-xs font-semibold text-ink">复制与 SOAP</h2>
             </div>
             <p className="mt-2 text-[10px] leading-5 text-slate-500">
-              复制内容只含问诊提纲，不含患者身份信息。粘贴到任何系统前，请确认未将“未询问”写成“已问”。
+              问诊提纲与 SOAP 草稿都不含患者身份信息。粘贴到任何系统前，请确认未将“未询问”写成“已问”，并把【待补充】替换为真实资料。
             </p>
-            <div className="mt-2.5">
+            <div className="mt-2.5 space-y-2">
               <CopyButton text={outline} className="w-full justify-center" />
+              <button
+                type="button"
+                onClick={() => setSoapOpen(true)}
+                className="inline-flex min-h-9 w-full items-center justify-center gap-1.5 rounded-xl border border-jade-200 bg-jade-50 px-3 py-1.5 text-xs font-semibold text-jade-800 transition hover:bg-jade-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jade-500 focus-visible:ring-offset-2"
+              >
+                <NotebookPen className="h-3.5 w-3.5" aria-hidden="true" />
+                生成 SOAP 病历草稿
+              </button>
             </div>
           </div>
 
           <DataDisclaimer compact />
         </aside>
       </div>
+
+      <SoapDraftDialog
+        open={soapOpen}
+        onClose={closeSoap}
+        symptom={symptom}
+        checked={checked}
+        totalQuestions={totalQuestions}
+      />
     </div>
   )
 }

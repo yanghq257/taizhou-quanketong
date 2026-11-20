@@ -5,6 +5,7 @@ import type { ExamTiming, Symptom } from '../../types'
 import { formulaMap } from '../../data/formulas'
 import { medicationMap } from '../../data/medications'
 import { cn, percent } from '../../lib/utils'
+import { SafetyNetCard } from './SafetyNetCard'
 
 const timingStyle: Record<ExamTiming, string> = {
   立即: 'border-danger-200 bg-danger-50 text-danger-700',
@@ -209,6 +210,10 @@ export function WorkupPanel({ symptom }: { symptom: Symptom }) {
           </div>
         </div>
       </section>
+
+      {symptom.safetyNet ? (
+        <SafetyNetCard safetyNet={symptom.safetyNet} className="xl:col-span-2" />
+      ) : null}
     </div>
   )
 }

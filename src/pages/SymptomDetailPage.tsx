@@ -61,6 +61,8 @@ export function SymptomDetailPage() {
   const criticalCount = symptom.differentials.filter((item) => item.tier === 'critical').length
   const commonCount = symptom.differentials.filter((item) => item.tier === 'common').length
   const rareCount = symptom.differentials.filter((item) => item.tier === 'rare').length
+  const hasMurtaghBands = symptom.differentials.some((item) => item.murtaghBand)
+  const hasYellowFlags = (symptom.yellowFlags?.length ?? 0) > 0
 
   function scrollToSection(sectionId: string) {
     const element = document.getElementById(sectionId)
@@ -159,9 +161,18 @@ export function SymptomDetailPage() {
         <SectionHeading
           kicker="01 · Differential triage"
           title="鉴别诊断"
-          description="先看红旗层；点开每一项查看支持线索、升级指征与初始检查。"
+          description={[
+            '先看红旗层；点开每一项查看支持线索、升级指征与初始检查。',
+            hasMurtaghBands
+              ? '常见病内按 Murtagh 标注「最常见 / 不常见但重要」，仅作教学分层。'
+              : '',
+            hasYellowFlags ? '黄旗提示心理社会因素，不降低红旗门槛。' : '',
+          ].join('')}
         />
-        <DifferentialPanel differentials={symptom.differentials} />
+        <DifferentialPanel
+          differentials={symptom.differentials}
+          yellowFlags={symptom.yellowFlags}
+        />
       </section>
 
       <section id="consultation" className="scroll-mt-36 pt-8">

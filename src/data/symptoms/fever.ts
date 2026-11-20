@@ -25,6 +25,38 @@ export const fever: Symptom = {
       '免疫抑制患者发热、疑似中枢感染、紫癜或暴发性皮疹',
     ],
   },
+  yellowFlags: [
+    {
+      id: 'social-isolation',
+      title: '独居 / 照护与就医条件不足',
+      signals: [
+        '独居、无可靠照护者，或居住地就医与交通不便',
+        '无法可靠观察意识、尿量和进食饮水情况',
+      ],
+      action:
+        '放宽门诊观察与离院标准，明确由谁观察、何时复诊及紧急求助方式；必要时安排留观或转诊。',
+    },
+    {
+      id: 'caregiver-distress',
+      title: '照护者焦虑或理解不足',
+      signals: [
+        '家属或照护者高度焦虑，无法复述危险信号和用药方法',
+        '家庭对病情判断分歧较大',
+      ],
+      action:
+        '用回述法确认安全网，提供书面复诊与急诊指征；不因家属焦虑而替代客观危险分层。',
+    },
+    {
+      id: 'health-anxiety',
+      title: '反复测温 / 健康焦虑',
+      signals: [
+        '频繁测温、反复就诊，对体温数字高度担忧',
+        '发热已退但主观不适持续，影响睡眠和进食',
+      ],
+      action:
+        '解释体温高低不等于病情轻重，安排明确复诊节点；出现红旗仍需立即评估。',
+    },
+  ],
   differentials: [
     {
       id: 'sepsis',
@@ -82,6 +114,7 @@ export const fever: Symptom = {
       englishName: 'Viral upper respiratory tract infection',
       tier: 'common',
       likelihood: '最常见',
+      murtaghBand: 'most-common',
       summary: '低至中度发热，伴鼻塞、咽痛、咳嗽、肌痛，整体精神状态通常尚可。',
       prevalenceNote: '全科门诊最常见的发热原因之一，通常自限。',
       clues: ['起病 1–3 天，流涕、咽痛、干咳、肌痛', '无呼吸困难，无局灶性肺炎体征', '季节性或家庭/单位聚集发病'],
@@ -96,6 +129,7 @@ export const fever: Symptom = {
       englishName: 'Bacterial pharyngotonsillitis',
       tier: 'common',
       likelihood: '常见',
+      murtaghBand: 'less-common-serious',
       summary: '明显咽痛、发热、扁桃体脓性渗出或颈前淋巴结压痛，咳嗽不突出。',
       prevalenceNote: '多数急性咽痛仍为病毒性，应结合评分与检测，避免经验性滥用抗菌药。',
       clues: ['发热伴明显咽痛、吞咽痛', '扁桃体红肿/渗出、颈前淋巴结肿大压痛', '无咳嗽、无流涕'],
@@ -110,6 +144,7 @@ export const fever: Symptom = {
       englishName: 'Urinary tract infection',
       tier: 'common',
       likelihood: '常见',
+      murtaghBand: 'most-common',
       summary: '发热伴尿频、尿急、尿痛或腰痛；老年人可能仅表现为意识改变或乏力。',
       prevalenceNote: '女性、留置导尿管、糖尿病和前列腺疾病患者更常见。',
       clues: ['排尿刺激症状、下腹不适', '肋脊角叩击痛、寒战', '老年患者新发谵妄或跌倒需考虑'],
@@ -124,6 +159,7 @@ export const fever: Symptom = {
       englishName: 'Acute gastroenteritis',
       tier: 'common',
       likelihood: '常见',
+      murtaghBand: 'most-common',
       summary: '发热伴腹泻、恶心呕吐或腹痛，需先看脱水与血便。',
       prevalenceNote: '夏秋季与不洁饮食/海鲜暴露后常见；多数自限，但脱水和侵袭性感染是关键风险。',
       clues: ['近期不洁饮食、同餐者发病', '水样便、腹痛、呕吐', '低中度发热'],
@@ -138,6 +174,7 @@ export const fever: Symptom = {
       englishName: 'Community-acquired pneumonia',
       tier: 'common',
       likelihood: '常见',
+      murtaghBand: 'less-common-serious',
       summary: '发热、咳嗽、肺部湿啰音或胸片浸润，但生命体征稳定。',
       prevalenceNote: '全科常见的下呼吸道感染；高龄患者表现可能不典型。',
       clues: ['发热、咳痰、胸膜性胸痛', '肺部湿啰音或实变体征', '胸片/CT 新发浸润'],
@@ -266,6 +303,17 @@ export const fever: Symptom = {
       '不要遗漏近期旅行、海鲜/生食、蚊虫叮咬、用药和免疫抑制史。',
       '多种复方感冒药/退热药叠加可造成对乙酰氨基酚过量。',
     ],
+  },
+  safetyNet: {
+    triggers: [
+      '意识改变、抽搐、叫不醒或明显反应迟钝',
+      '呼吸急促或困难，或 SpO₂ < 92%（海平面、无慢性基线）',
+      '收缩压 < 90 mmHg，或头晕、晕厥、皮肤湿冷',
+      '尿量明显减少、无法进水或持续呕吐',
+      '高热不退或整体状态进行性变差',
+    ],
+    action: '立即复诊或到急诊；情况危急时拨打 120，不要只在家反复加退热药。',
+    followUp: '按评估约定时间复诊；高热持续超过 3 天、出现新发症状或精神变差时提前复诊。',
   },
   reviewNote: '发热与脓毒症内容需由急诊、感染科、医务处与药剂科审核；本地暴露史应结合当季疾控提示更新。',
 }

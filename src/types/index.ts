@@ -26,6 +26,9 @@ export type SymptomIcon =
 
 export type DifferentialTier = 'critical' | 'common' | 'rare'
 
+/** Murtagh 常见度框架中的重点子层，仅用于“常见病”层内的教学标注。 */
+export type MurtaghBand = 'most-common' | 'less-common-serious'
+
 export type Likelihood = '优先排除' | '最常见' | '常见' | '较少见'
 
 export type TriageUrgency = 'immediate' | 'urgent' | 'routine'
@@ -62,6 +65,8 @@ export interface Differential {
   englishName?: string
   tier: DifferentialTier
   likelihood: Likelihood
+  /** 可选：在“常见病”层内标注 Murtagh 的重点常见度子层 */
+  murtaghBand?: MurtaghBand
   /** 一句话门诊画像，帮助快速建立“像不像”的直觉 */
   summary: string
   /** 常见度/流行病学提示，避免被误读为精确概率 */
@@ -78,6 +83,21 @@ export interface TriageInfo {
   label: string
   message: string
   criteria: string[]
+}
+
+/** 心理社会/就医行为黄旗：用于提示需要额外解释与随访，不降低红旗门槛。 */
+export interface YellowFlag {
+  id: string
+  title: string
+  signals: string[]
+  action: string
+}
+
+/** 离院前必须交代的安全网；触发条件由各症状数据提供。 */
+export interface SafetyNet {
+  triggers: string[]
+  action: string
+  followUp: string
 }
 
 export interface TcmPattern {
@@ -117,6 +137,8 @@ export interface Symptom {
   overview: string
   epidemiologyNote: string
   triage: TriageInfo
+  /** 可选：心理社会/就医行为黄旗筛查提示 */
+  yellowFlags?: YellowFlag[]
   differentials: Differential[]
   opqrst: OpqrstPrompt[]
   /** 本病在标准十问中的追问重点 */
@@ -126,6 +148,8 @@ export interface Symptom {
   medicationIds: string[]
   formulaIds: string[]
   communication: SymptomCommunication
+  /** 可选：离院前安全网话术 */
+  safetyNet?: SafetyNet
   reviewNote: string
 }
 

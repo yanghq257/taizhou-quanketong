@@ -25,6 +25,39 @@ export const chestPain: Symptom = {
       '胸痛伴低氧、心动过速、近期手术/制动/肿瘤等血栓风险',
     ],
   },
+  yellowFlags: [
+    {
+      id: 'panic-anxiety',
+      title: '焦虑 / 惊恐相关表现',
+      signals: [
+        '胸闷伴明显心悸、过度换气、手脚麻木或濒死感',
+        '情绪波动或应激后发作，反复因类似症状就诊',
+        '既往有焦虑或惊恐发作史',
+      ],
+      action:
+        '先完成心电图和心血管危险分层，再评估焦虑；不得用“焦虑”解释首次、持续或高危胸痛。',
+    },
+    {
+      id: 'psychosocial-stress',
+      title: '近期重大心理社会应激',
+      signals: [
+        '近期丧亲、家庭冲突、失业、照护负担或经济压力',
+        '症状与应激事件时间相关，但缺乏明确器质性线索',
+      ],
+      action:
+        '记录为黄旗并加强解释、陪伴与随访；不改变红旗排查和检查阈值。',
+    },
+    {
+      id: 'health-anxiety',
+      title: '反复就诊 / 健康焦虑',
+      signals: [
+        '多次因胸痛就诊，检查阴性仍持续强烈担忧',
+        '频繁自行测量血压、心率或反复搜索疾病信息',
+      ],
+      action:
+        '设置固定随访和必要时心理评估，避免无指征重复检查；新发或性质变化的胸痛重新按红旗评估。',
+    },
+  ],
   differentials: [
     {
       id: 'acs',
@@ -101,6 +134,7 @@ export const chestPain: Symptom = {
       englishName: 'GERD / Esophageal spasm',
       tier: 'common',
       likelihood: '最常见',
+      murtaghBand: 'most-common',
       summary: '烧灼样胸骨后不适，多餐后、平卧或夜间明显，抗酸治疗可缓解；但必须与 ACS 鉴别。',
       prevalenceNote: '门诊常见的非心源性胸痛原因之一。',
       clues: ['烧心、反酸、口苦，餐后或平卧加重', '疼痛可向背部或咽喉放射', '缺乏用力/情绪诱因，心电图和肌钙蛋白无急性缺血证据'],
@@ -115,6 +149,7 @@ export const chestPain: Symptom = {
       englishName: 'Chest wall pain',
       tier: 'common',
       likelihood: '常见',
+      murtaghBand: 'most-common',
       summary: '局部压痛、随呼吸/转体/按压加重，无全身症状；定位明确。',
       prevalenceNote: '门诊胸痛常见原因，但“按压痛”不能单独排除 ACS。',
       clues: ['可复现的局部压痛', '近期剧烈咳嗽、搬抬或运动史', '吸气、转身或抬臂时加重'],
@@ -129,6 +164,7 @@ export const chestPain: Symptom = {
       englishName: 'Stable angina',
       tier: 'common',
       likelihood: '常见',
+      murtaghBand: 'less-common-serious',
       summary: '活动或情绪诱发的胸骨后压迫感，休息数分钟缓解，发作模式相对稳定。',
       prevalenceNote: '属于冠心病表现，仍需规范评估和长期风险管理，不能当“普通胸痛”处理。',
       clues: ['劳力诱发、休息 3–5 分钟缓解', '放射至肩/臂/下颌，伴压迫感', '既往冠心病、高血压、糖尿病、吸烟史'],
@@ -157,6 +193,7 @@ export const chestPain: Symptom = {
       englishName: 'Herpes zoster',
       tier: 'common',
       likelihood: '常见',
+      murtaghBand: 'less-common-serious',
       summary: '单侧沿皮节分布的烧灼/针刺痛，皮疹可在疼痛后数天出现；免疫抑制者风险高。',
       prevalenceNote: '中老年人常见，皮疹未出现时容易误诊为肌肉或心脏问题。',
       clues: ['单侧、皮节分布的烧灼感和触痛', '疼痛先于皮疹，局部皮肤感觉异常', '近期劳累或免疫抑制'],
@@ -285,6 +322,16 @@ export const chestPain: Symptom = {
       '高血压/心率快、单侧脉搏弱或撕裂样背痛，要主动想到主动脉夹层。',
       '不要因中医证型为“气滞”或“痰湿”而延误急性胸痛的急诊流程。',
     ],
+  },
+  safetyNet: {
+    triggers: [
+      '胸痛持续超过 15 分钟不缓解，或反复发作并明显加重',
+      '伴冷汗、恶心、晕厥、濒死感或明显呼吸困难',
+      '新发单侧无力、口角歪斜、言语不清或意识改变',
+      '心跳极快、不规则，伴头晕或黑矇',
+    ],
+    action: '立即拨打 120 或到急诊，不要自行驾车，不要等待次日门诊。',
+    followUp: '本次排除急症后，按评估约定时间复诊；任何新发红旗症状随时急诊。',
   },
   reviewNote: '胸痛路径、急救用药与再灌注流程必须由胸痛中心、急诊科和心内科审核后替换为院内正式流程。',
 }

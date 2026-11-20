@@ -1,6 +1,6 @@
 import {
   ArrowRight,
-  ClipboardList,
+  Brain,
   MessageCircle,
   Pill,
   ShieldCheck,
@@ -19,9 +19,9 @@ import { homeSymptomOrder, popularSearches, searchSymptoms, symptoms } from '../
 const quickTools = [
   {
     to: '/consult',
-    title: '首诊问诊单',
-    copy: 'OPQRST + 中医十问，逐项核对不漏项',
-    icon: ClipboardList,
+    title: '全科临床思维',
+    copy: '三假设问诊 + SOAP 草稿，先想清再动手',
+    icon: Brain,
   },
   {
     to: '/checklist',

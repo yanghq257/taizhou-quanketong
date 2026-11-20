@@ -1,5 +1,5 @@
 /* 台州全科通 Service Worker：离线可查，不缓存任何患者数据。 */
-const CACHE_VERSION = 'tkt-v2'
+const CACHE_VERSION = 'tkt-v3'
 const CORE_CACHE = `${CACHE_VERSION}-core`
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`
 const BASE = new URL('./', self.registration.scope).href
