@@ -1,0 +1,59 @@
+{
+  "id": "./",
+  "name": "台州全科通 · 首诊学习助手",
+  "short_name": "台州全科通",
+  "description": "台州市中医院全科首诊学习工具：症状鉴别、三层红旗排序、OPQRST 与中医十问、用药安全提示。",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#F2F7F4",
+  "theme_color": "#0F665D",
+  "categories": ["medical", "education", "health"],
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "红旗速查",
+      "short_name": "红旗",
+      "description": "查看门急诊红旗与升级条件",
+      "url": "./#/checklist",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "首诊问诊单",
+      "short_name": "问诊",
+      "description": "OPQRST 与中医十问核对",
+      "url": "./#/consult",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "配药房",
+      "short_name": "配药",
+      "description": "中西药与相互作用红灯",
+      "url": "./#/medications",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
