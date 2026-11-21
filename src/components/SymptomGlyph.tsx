@@ -8,6 +8,7 @@ import {
   Stethoscope,
   Thermometer,
   TrendingDown,
+  Utensils,
   Waves,
   Wind,
 } from 'lucide-react'
@@ -23,6 +24,7 @@ const iconMap: Record<SymptomIcon, LucideIcon> = {
   abdomen: Stethoscope,
   cough: Wind,
   bowel: Droplets,
+  vomiting: Utensils,
   fatigue: BatteryLow,
   edema: Waves,
   'weight-loss': TrendingDown,

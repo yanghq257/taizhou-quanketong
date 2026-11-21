@@ -6,6 +6,7 @@ import { dizziness } from './dizziness'
 import { abdominalPain } from './abdominal-pain'
 import { cough } from './cough'
 import { diarrhea } from './diarrhea'
+import { vomiting } from './vomiting'
 import { fatigue } from './fatigue'
 import { edema } from './edema'
 import { weightLoss } from './weight-loss'
@@ -19,6 +20,7 @@ export const symptoms: Symptom[] = [
   abdominalPain,
   cough,
   diarrhea,
+  vomiting,
   fatigue,
   edema,
   weightLoss,
@@ -34,6 +36,7 @@ export const homeSymptomOrder: SymptomId[] = [
   'fever',
   'cough',
   'diarrhea',
+  'vomiting',
   'dizziness',
   'abdominal-pain',
   'headache',
@@ -75,9 +78,9 @@ export function searchSymptoms(rawQuery: string): SearchMatch[] {
     ]
 
     if (fields.some((field) => normalize(field).includes(query))) {
-      const matchedOn = symptom.name.includes(rawQuery.trim())
+      const matchedOn = normalize(symptom.name).includes(query)
         ? '症状名称'
-        : symptom.aliases.includes(rawQuery.trim())
+        : symptom.aliases.some((alias) => normalize(alias).includes(query))
           ? '症状别名'
           : '症状相关'
       return [{ symptom, matchedOn }]

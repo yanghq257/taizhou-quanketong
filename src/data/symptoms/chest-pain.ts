@@ -4,7 +4,7 @@ export const chestPain: Symptom = {
   id: 'chest-pain',
   name: '胸痛',
   englishName: 'Chest pain',
-  aliases: ['胸痛', '胸口痛', '胸闷', '心口痛', '胸前区疼痛', '心梗', '心绞痛', '夹层'],
+  aliases: ['胸痛', '胸口痛', '胸口疼', '胸闷', '心口痛', '胸前区疼痛', '心梗', '心绞痛', '夹层'],
   icon: 'chest',
   category: '胸部症状',
   tagline: '先排致命五联，再谈“胃痛”或“肌肉痛”',

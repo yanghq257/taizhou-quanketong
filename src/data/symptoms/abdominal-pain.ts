@@ -4,7 +4,7 @@ export const abdominalPain: Symptom = {
   id: 'abdominal-pain',
   name: '腹痛',
   englishName: 'Abdominal pain',
-  aliases: ['肚子痛', '腹痛', '胃痛', '上腹痛', '下腹痛', '急性腹痛', '阑尾炎'],
+  aliases: ['肚子痛', '肚子疼', '腹痛', '胃痛', '上腹痛', '下腹痛', '急性腹痛', '阑尾炎'],
   icon: 'abdomen',
   category: '消化系统症状',
   tagline: '先问年龄、性别、手术史，再看“是否需要外科”',

@@ -4,7 +4,7 @@ export const diarrhea: Symptom = {
   id: 'diarrhea',
   name: '腹泻',
   englishName: 'Diarrhea',
-  aliases: ['拉肚子', '腹泻', '水样便', '急性腹泻', '痢疾', '血便', '稀便'],
+  aliases: ['拉肚子', '腹泻', '水样便', '跑肚', '急性腹泻', '痢疾', '血便', '稀便'],
   icon: 'bowel',
   category: '消化系统症状',
   tagline: '先防脱水，再问血便、发热、用药和暴发',
